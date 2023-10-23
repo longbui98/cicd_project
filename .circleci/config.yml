@@ -107,6 +107,8 @@ jobs:
           command: |
             cd frontend
             npm install
+            npm install minimist@latest
+            npm install loader-utils@latest 
             npm audit fix --force
             npm audit --audit-level=critical
 
@@ -122,6 +124,8 @@ jobs:
           command: |
             cd frontend
             npm install
+            npm install minimist@latest
+            npm install loader-utils@latest 
             npm audit fix --force
             npm audit --audit-level=critical
 
