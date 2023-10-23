@@ -40,7 +40,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.3.5",
-    "file-loader": "6.2.0",
+    "file-loader": "^4.0.0",
     "html-loader": "^1.0.0-alpha.0",
     "html-webpack-plugin": "^4.0.0-beta.4",
     "identity-obj-proxy": "^3.0.0",
@@ -65,7 +65,9 @@
     "webpack": "^4.35.3",
     "webpack-cleanup-plugin": "^0.5.1",
     "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.7.2",
+    "minimist": "1.2.6",
+    "loader-utils": "2.0.3"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
