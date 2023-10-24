@@ -164,13 +164,14 @@ jobs:
       - destroy-environment
   configure-infrastructure:
     docker:
-      image: ubuntu-2004:2023.10.1
+      - image: ubuntu-2004:2023.10.1
     steps:
       - checkout
       - add_ssh_keys:
             fingerprints: [ad:8d:62:dc:0b:b1:23:7d:90:1f:17:39:51:2c:29:8f]
       - persist_to_workspace:
           root: ~/
+          paths: ~/
       - run:
           name: Install dependencies
           command: |
