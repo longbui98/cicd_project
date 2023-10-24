@@ -3,9 +3,12 @@ version: 2.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    docker:
-      - image: amazon/aws-cli
     steps:
+      - run:
+          name: Insall AWS CLI
+          command: |
+            apk -v --update add python3 py-pip
+            pip install awscli
       - run:
           name: Destroy environments
           when: on_fail
@@ -173,7 +176,8 @@ jobs:
             fingerprints: [ad:8d:62:dc:0b:b1:23:7d:90:1f:17:39:51:2c:29:8f]
       - persist_to_workspace:
           root: ~/
-          paths: project/.circleci
+          paths: 
+            - project/.circleci
       - run:
           name: Install dependencies
           command: |
@@ -191,7 +195,8 @@ jobs:
       - checkout
       - persist_to_workspace:
           root: ~/
-          paths: project/
+          paths: 
+            - project/frontend
       - run:
           name: Run migrations
           command: |
@@ -213,7 +218,8 @@ jobs:
       - checkout
       - persist_to_workspace:
           root: ~/
-          paths: project/frontend
+          paths: 
+            - project/frontend
       - run:
           name: Install dependencies
           command: |
