@@ -189,7 +189,7 @@ jobs:
       - checkout
       - persist_to_workspace:
           root: ~/
-          paths: project/.circleci
+          paths: project/
       - run:
           name: Run migrations
           command: |
@@ -211,7 +211,7 @@ jobs:
       - checkout
       - persist_to_workspace:
           root: ~/
-          paths: project/.circleci
+          paths: project/
       - run:
           name: Install dependencies
           command: |
