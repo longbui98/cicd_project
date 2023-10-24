@@ -7,7 +7,6 @@ commands:
       - run:
           name: Insall AWS CLI
           command: |
-            apk -v --update add python3 py-pip
             pip install awscli
       - run:
           name: Destroy environments
