@@ -198,11 +198,11 @@ jobs:
       - run:
           name: Send migration results to memstash
           command: |
-              cat ~/project/backend/migrations_dump.txt
-             	if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-              then
-                  curl https://kvdb.io/TwniJT5UFxFZM66gXv8KdL/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
-              fi
+            cat ~/project/backend/migrations_dump.txt
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then
+              curl https://kvdb.io/TwniJT5UFxFZM66gXv8KdL/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+            fi
       - destroy-environment 
 
   deploy-frontend:
