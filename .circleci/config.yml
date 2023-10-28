@@ -132,6 +132,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
       - run:
           name: Install tar and gzip
           command: |
@@ -158,10 +162,6 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> inventory 
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/.circleci/ansible/inventory.txt
       - destroy-environment
   configure-infrastructure:
     docker:
@@ -238,23 +238,45 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment     
-                    
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+                      
+  deploy-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/
+      - add_ssh_keys:
+          fingerprints: [ad:8d:62:dc:0b:b1:23:7d:90:1f:17:39:51:2c:29:8f] 
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt -y update
+            sudo apt install -y tar gzip curl unzip
+            sudo apt install -y software-properties-common
+            sudo apt install -y python3 python3-pip
+            python3 -m pip install --user ansible
+      - run:
+          name: Install aws-cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      - destroy-environment  
 
 #   smoke-test:
 #     docker:
@@ -338,8 +360,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
