@@ -132,10 +132,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/.circleci
       - run:
           name: Install tar and gzip
           command: |
@@ -162,6 +158,10 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> inventory 
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
       - destroy-environment
   configure-infrastructure:
     docker:
