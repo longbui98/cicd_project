@@ -25,7 +25,7 @@
   environment:
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"  
     - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-    - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
+    - TYPEORM_HOST: "database-2.c2roen6ycxt3.us-east-1.rds.amazonaws.com"
     - TYPEORM_PORT: 5432
     - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
     - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
