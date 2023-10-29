@@ -24,7 +24,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/TwniJT5UFxFZM66gXv8KdL/migration_<< parameters.workflow_id >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/R5G4oDceoC3mRCseSvCa4S/migration_<< parameters.workflow_id >>)
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
@@ -205,7 +205,7 @@ jobs:
             cat ~/project/backend/migrations_dump.txt
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              curl https://kvdb.io/TwniJT5UFxFZM66gXv8KdL/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              curl https://kvdb.io/R5G4oDceoC3mRCseSvCa4S/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - destroy-environment 
 
