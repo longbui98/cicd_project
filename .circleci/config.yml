@@ -12,8 +12,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-
+            aws cloudformation delete-stack --stack-name udapeople-backend-parameters.workflow_id
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
@@ -166,6 +165,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
+
   configure-infrastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -187,6 +187,7 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment    
+      
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
@@ -196,7 +197,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install
+            npm install 
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to memstash
