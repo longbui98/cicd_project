@@ -277,16 +277,16 @@ jobs:
 
   smoke-test:
     docker:
-      - image: technekes/circleci:alpine
+      - image: python:3.9.1-alpine3.12
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            apk add --no-cache curl
-            apk add --update nodejs npm
-            apk add --update py-pip
-            pip install awscli
+            apt-get update && sudo apt-get install -y curl
+            apt-get install -y nodejs npm
+            sudo apt-get install -y python3-pip
+            pip3 install awscli
       - run:
           name: Backend smoke test.
           command: |
