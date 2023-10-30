@@ -24,7 +24,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/R5G4oDceoC3mRCseSvCa4S/migration_<< ${parameters.workflow_id} >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/R5G4oDceoC3mRCseSvCa4S/migration_<< parameters.workflow_id >>)
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
