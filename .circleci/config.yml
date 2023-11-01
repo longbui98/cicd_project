@@ -172,6 +172,8 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - add_ssh_keys:
             fingerprints: [ad:8d:62:dc:0b:b1:23:7d:90:1f:17:39:51:2c:29:8f]
       - attach_workspace:
@@ -254,7 +256,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/project/.circleci/ansible/
+          at: ~/
       - add_ssh_keys:
           fingerprints: [ad:8d:62:dc:0b:b1:23:7d:90:1f:17:39:51:2c:29:8f] 
       - run:
@@ -285,7 +287,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/project/.circleci/ansible/
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -298,8 +300,11 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
+            export BACKEND_IP=$(aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text)
+            echo ${BACKEND_IP}
+            echo ${API_URL}
             if curl "${API_URL}/api/status" | grep "ok"
             then
               return 0
