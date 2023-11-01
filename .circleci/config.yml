@@ -221,6 +221,8 @@ jobs:
       - checkout
       - restore_cache:
           keys: [frontend-build]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
