@@ -253,7 +253,7 @@ jobs:
       - image: python:3.9.1-alpine3.12
     steps:
       - checkout
-      - deploy-frontend:
+      - attach_workspace:
           at: ~/
       - add_ssh_keys:
           fingerprints: [ad:8d:62:dc:0b:b1:23:7d:90:1f:17:39:51:2c:29:8f] 
