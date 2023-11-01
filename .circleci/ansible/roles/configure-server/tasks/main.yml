@@ -5,7 +5,7 @@
     update_cache: yes
     
 - name: "upgrade packages."
-  become: true
+  become: yes
   apt:
     upgrade: "yes"
 
@@ -15,14 +15,14 @@
     autoremove: yes
 
 - name: "install dependencies."
-  become: true
+  become: yes
   apt:
     name: ["nodejs", "npm"]
     state: latest
     update_cache: yes
 
 - name: "install pm2"
-  become: true
+  become: yes
   npm:
     name: pm2
     global: yes
