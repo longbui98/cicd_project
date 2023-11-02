@@ -11,10 +11,6 @@
     cd /home/ubuntu
     tar xvzf artifact.tar.gz -C .
 
-- name: copy env file
-  become: true
-  shell: cp /home/ubuntu/.env.sample /home/ubuntu/.env
-
 - name: "start server"
   become: true
   shell:
