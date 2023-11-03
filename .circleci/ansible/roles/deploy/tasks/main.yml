@@ -17,4 +17,6 @@
     cd /home/ubuntu
     sudo npm install
     sudo pm2 stop default
-    sudo m2 start npm -- start
+    sudo pm2 start npm -- start
+    sudo pm2 startup
+    sudo pm2 save
