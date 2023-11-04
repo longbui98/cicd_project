@@ -222,7 +222,6 @@ jobs:
           name: Accessing key from kvdb.io
           command: |
             curl --insecure https://kvdb.io/VZNDWCZz5NPBkEr81irH3u/migration_${CIRCLE_WORKFLOW_ID:0:7}
-      - ensure-backend-env-exists
       - destroy-environment 
 
   deploy-frontend:
@@ -289,6 +288,7 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+      - ensure-backend-env-exists
       - destroy-environment  
       - revert-migrations
 
