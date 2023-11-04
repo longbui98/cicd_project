@@ -13,10 +13,12 @@
 
 - name: "start server"
   become: true
+  become_method: sudo
+  become_user: root  
   shell:
     cd /home/ubuntu
-    sudo npm install
-    sudo pm2 stop default
-    sudo pm2 start npm -- start
-    sudo pm2 startup
-    sudo pm2 save
+    npm install
+    pm2 stop default
+    pm2 start npm -- start
+    pm2 startup
+    pm2 save
