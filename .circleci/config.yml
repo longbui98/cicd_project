@@ -40,7 +40,7 @@ commands:
           name: Create backend .env
           command: |
             echo -e "NODE_ENV=local\nVERSION=1\nTYPEORM_CONNECTION=${TYPEORM_CONNECTION}\nTYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}\nTYPEORM_ENTITIES=${TYPEORM_ENTITIES}\nTYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}\nTYPEORM_HOST=${TYPEORM_HOST}\nTYPEORM_PORT=${TYPEORM_PORT}\nTYPEORM_USERNAME=${TYPEORM_USERNAME}\nTYPEORM_PASSWORD=${TYPEORM_PASSWORD}\nTYPEORM_DATABASE=${TYPEORM_DATABASE}" 
-              >> backend/.env
+              >> ~/project/backend/.env
 jobs:
   build-frontend:
     docker:
@@ -222,6 +222,7 @@ jobs:
           name: Accessing key from kvdb.io
           command: |
             curl --insecure https://kvdb.io/VZNDWCZz5NPBkEr81irH3u/migration_${CIRCLE_WORKFLOW_ID:0:7}
+      - ensure-backend-env-exists
       - destroy-environment 
 
   deploy-frontend:
@@ -288,7 +289,6 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - ensure-backend-env-exists
       - destroy-environment  
       - revert-migrations
 
