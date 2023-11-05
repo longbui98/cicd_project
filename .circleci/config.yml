@@ -226,7 +226,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/backend/
+            - project/
       - destroy-environment 
 
   deploy-frontend:
