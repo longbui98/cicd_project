@@ -146,16 +146,16 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=cicd_project \
-              --stack-name "udapeople-backend-${CIRCLE_id:0:7}" \
-              --parameter-overrides ID="${CIRCLE_id:0:7}"  
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=cicd_project \
-              --stack-name "udapeople-frontend-${CIRCLE_id:0:7}" \
-              --parameter-overrides ID="${CIRCLE_id:0:7}"  
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run:
           name: Add env to backend
           command: |
@@ -181,7 +181,7 @@ jobs:
             - project/backend/.env
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
     docker:
@@ -203,7 +203,7 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
-          id : ${CIRCLE_id:0:7}    
+          id : ${CIRCLE_WORKFLOW_ID:0:7}    
       
   run-migrations:
     docker:
@@ -225,14 +225,14 @@ jobs:
             echo "insecure" >> ~/.curlrc
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              curl https://kvdb.io/VZNDWCZz5NPBkEr81irH3u/migration_${CIRCLE_id:0:7}  -d '1'
+              curl https://kvdb.io/VZNDWCZz5NPBkEr81irH3u/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - run:
           name: Accessing key from kvdb.io
           command: |
-            curl --insecure https://kvdb.io/VZNDWCZz5NPBkEr81irH3u/migration_${CIRCLE_id:0:7}
+            curl --insecure https://kvdb.io/VZNDWCZz5NPBkEr81irH3u/migration_${CIRCLE_WORKFLOW_ID:0:7}
       - destroy-environment:
-          id : ${CIRCLE_id:0:7} 
+          id : ${CIRCLE_WORKFLOW_ID:0:7} 
 
   deploy-frontend:
     docker:
@@ -265,12 +265,12 @@ jobs:
             cd frontend
             npm install
             npm run build
-            tar -czvf artifact-"${CIRCLE_id:0:7}".tar.gz dist
-            aws s3 cp dist s3://udapeople-${CIRCLE_id:0:7} --recursive
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
                       
   deploy-backend:
     docker:
@@ -301,9 +301,9 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment:
-          id : ${CIRCLE_id:0:7}  
+          id : ${CIRCLE_WORKFLOW_ID:0:7}  
       - revert-migrations:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
@@ -337,7 +337,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-${CIRCLE_id:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
@@ -346,9 +346,9 @@ jobs:
               return 1
             fi
       - destroy-environment:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
 
   cloudfront-update:
     docker:
@@ -369,12 +369,12 @@ jobs:
             aws cloudformation deploy \
                       --template-file .circleci/files/cloudfront.yml \
                       --stack-name InitialStack \
-                      --parameter-overrides WorkflowID="udapeople-${CIRCLE_id:0:7}" \
+                      --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
                       --tags project=udapeople
       - destroy-environment:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
-          id : ${CIRCLE_id:0:7}
+          id : ${CIRCLE_WORKFLOW_ID:0:7}
 
   cleanup:
       docker:
@@ -388,7 +388,7 @@ jobs:
                     list-exports --query "Exports[?Name==\`NewWorkflowID\`].Value" \
                     --no-paginate --output text)
               echo OldWorkflowID: "${OldWorkflowID}"
-              echo CIRCLE_id "${CIRCLE_id:0:7}"
+              echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
                         
               export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
                       --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
