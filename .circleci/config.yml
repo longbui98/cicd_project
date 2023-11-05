@@ -12,6 +12,9 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
+            if aws s3 ls | grep udapeople-<<parameters.id>>; then
+              aws s3 rm s3://udapeople-<<parameters.id>> --recursive
+            fi
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
   revert-migrations:
@@ -355,7 +358,7 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-            curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -
+            curl -sL https://rpm.nodesource.com/setup_14.x | -E bash -
             yum install -y nodejs
             node -v
             npm -v
