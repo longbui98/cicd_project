@@ -337,15 +337,14 @@ jobs:
 
   cloudfront-update:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.9.1-alpine3.12
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-            curl -sL https://rpm.nodesource.com/setup_14.x | -E bash -
-            yum install -y nodejs
+            apk update
+            apk add npm nodejs
             node -v
             npm -v
       - run:
