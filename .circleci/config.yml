@@ -347,6 +347,7 @@ jobs:
             apk add npm nodejs
             node -v
             npm -v
+            apk add --update ansible aws-cli
       - run:
           name: Update cloudfront distribution
           command: |
