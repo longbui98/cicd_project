@@ -340,6 +340,8 @@ jobs:
       - image: python:3.9.1-alpine3.12
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -352,7 +354,7 @@ jobs:
           name: Update cloudfront distribution
           command: |
             aws cloudformation deploy \
-                      --template-file .circleci/files/cloudfront.yml \
+                      --template-file ~/project/.circleci/files/cloudfront.yml \
                       --stack-name InitialStack \
                       --parameter-overrides NewWorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
                       --tags project=udapeople
