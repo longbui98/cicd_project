@@ -127,13 +127,15 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.9.1-alpine3.12
     steps:
       - checkout
       - run:
           name: Install tar and gzip
           command: |
-            yum install -y tar gzip
+            apk update
+            apk add tar gzip 
+            apk add --update ansible aws-cli
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -188,7 +190,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
+            apk add --update ansible aws-cli
       - run:
           name: Configure server
           command: |
@@ -204,6 +206,13 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
+      - run:
+          name: Install aws cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            aws --version
       - run:
           name: Run migrations
           command: |
