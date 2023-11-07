@@ -15,7 +15,7 @@
 - name: "add node exporter configuration."
   become: true
   copy:
-    src: node_exporter.service
+    src: ~/project/.circleci/ansible/roles/configure-prometheus-node-exporter/node_exporter.service
     dest: /etc/systemd/system/
 
 - name: "enable node_exporter service"
