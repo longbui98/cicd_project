@@ -29,7 +29,7 @@ Resources:
       SecurityGroups:
         - Ref: InstanceSecurityGroup
       KeyName: test-key2
-      ImageId: ami-0fc5d935ebf8bc3bc
+      ImageId: ami-068663a3c619dd892
       Tags:
         - Key: Name
           Value: !Sub backend-${ID}
