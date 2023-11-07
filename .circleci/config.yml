@@ -191,6 +191,7 @@ jobs:
           name: Install dependencies
           command: |
             apk update
+            apk add tar gzip 
             apk add --update ansible aws-cli
       - run:
           name: Configure server
