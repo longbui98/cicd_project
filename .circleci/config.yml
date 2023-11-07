@@ -131,7 +131,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install tar and gzip
+          name: Install tar, gzip and aws
           command: |
             apk update
             apk add tar gzip 
@@ -190,6 +190,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            apk update
             apk add --update ansible aws-cli
       - run:
           name: Configure server
