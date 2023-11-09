@@ -22,7 +22,7 @@ commands:
           command: |
             echo "insecure" >> ~/.curlrc
             export SUCCESS=$(curl --insecure  https://kvdb.io/VZNDWCZz5NPBkEr81irH3u/migration_${CIRCLE_WORKFLOW_ID:0:7})
-            if(( $SUCCESS==1 )); 
+            if(( $SUCCESS == 1 )); 
             then
               cd ~/project/backend
               npm install
