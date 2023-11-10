@@ -367,8 +367,8 @@ jobs:
           command: |
             aws cloudformation deploy \
                       --template-file ~/project/.circleci/files/cloudfront.yml \
-                      --stack-name StackUpdateInitial \
-                      --parameter-overrides WorkflowID2="${CIRCLE_WORKFLOW_ID:0:7}" \
+                      --stack-name InitialStackUpdateV2 \
+                      --parameter-overrides NewWorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
                       --tags project=udapeople
       - destroy-environment
       - revert-migrations
@@ -382,7 +382,7 @@ jobs:
             name: Get old stack workflow id
             command: | 
               export OldWorkflowID=$(aws cloudformation \
-                    list-exports --query "Exports[?Name==\`WorkflowID2\`].Value" \
+                    list-exports --query "Exports[?Name==\`NewWorkflowID\`].Value" \
                     --no-paginate --output text)
               echo OldWorkflowID: "${OldWorkflowID}"
               echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
